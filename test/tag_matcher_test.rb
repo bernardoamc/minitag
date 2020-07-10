@@ -1,4 +1,6 @@
-require "test_helper"
+# frozen_string_literal: true
+
+require 'test_helper'
 
 module Minitag
   class TagMatcherTest < Minitest::Test
@@ -23,7 +25,7 @@ module Minitag
     end
 
     def test_tag_inclusive_match_when_desired_tag_matches_at_least_one_existing_tag
-      result = TagMatcher.inclusive_match?(['foo'], ['bar', 'yay', 'foo'])
+      result = TagMatcher.inclusive_match?(['foo'], %w[bar yay foo])
       assert_equal true, result
     end
 
@@ -33,7 +35,7 @@ module Minitag
     end
 
     def test_tag_exclusive_match_when_desired_tag_matches_at_least_one_existing_tag
-      result = TagMatcher.exclusive_match?(['foo'], ['bar', 'yay', 'foo'])
+      result = TagMatcher.exclusive_match?(['foo'], %w[bar yay foo])
       assert_equal false, result
     end
 

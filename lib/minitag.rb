@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'minitest'
 require 'minitag/version'
 require 'minitag/tag'
@@ -5,6 +7,8 @@ require 'minitag/tag_mapper'
 require 'minitag/tag_matcher'
 require 'minitag/tag_extension'
 
+# Namespace for classes or modules providing tagging functionality
+# to Minitest::Test
 module Minitag
   class << self
     def execution_tags
@@ -24,7 +28,7 @@ module Minitag
     end
 
     def tag_mapping
-      @mapping ||= Minitag::TagMapper.new
+      @tag_mapping ||= Minitag::TagMapper.new
     end
   end
 end

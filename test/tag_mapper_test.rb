@@ -1,4 +1,6 @@
-require "test_helper"
+# frozen_string_literal: true
+
+require 'test_helper'
 
 module Minitag
   class TagMapperTest < Minitest::Test
@@ -10,7 +12,7 @@ module Minitag
 
       mapper.add(context: 'test', name: 'add', tag: 'yay')
       tags = mapper.fetch(context: 'test', name: 'add')
-      assert_equal ['cool', 'yay'], tags.map(&:name)
+      assert_equal %w[cool yay], tags.map(&:name)
     end
   end
 end

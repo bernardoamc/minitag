@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 require 'minitag'
 
+# Plugin extension to allow developers to run their tests while specifying
+# the `--tag` or `-t` options.
 module Minitest
   def self.plugin_minitag_options(opts, options)
     opts.on '-t', '--tag TAG' do |tag|

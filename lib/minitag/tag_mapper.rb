@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Minitag
+  # Stores the mapping between a test name and its existing tags.
   class TagMapper
     attr_reader :repository
 

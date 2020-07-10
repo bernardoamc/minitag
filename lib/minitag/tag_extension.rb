@@ -1,4 +1,11 @@
+# frozen_string_literal: true
+
 module Minitag
+  # Module used to extend Minitest::Test.
+  # It has the following responsibilities:
+  #   - Introduce the tag functionality
+  #   - Associate tags with tests
+  #   - Filter tests based on the specified tags
   module TagExtension
     def tag(*tags)
       Minitag.pending_tags = tags
@@ -18,17 +25,16 @@ module Minitag
       methods = super.dup
       return methods if Minitag.execution_tags.empty? || methods.empty?
 
-      inclusive_tags = Minitag.execution_tags.select(&:inclusive?).map(&:name)
-      exclusive_tags = Minitag.execution_tags.select(&:exclusive?).map(&:name)
+      execution_tags = Minitag.execution_tags
+      inclusive_tags = execution_tags.select(&:inclusive?).map(&:name)
+      exclusive_tags = execution_tags.select(&:exclusive?).map(&:name)
 
-      methods.select! do |runnable_method|
+      methods.select do |runnable_method|
         runnable_method_tags = Minitag.tag_mapping.fetch(context: self, name: runnable_method).map(&:name)
 
         Minitag::TagMatcher.inclusive_match?(inclusive_tags, runnable_method_tags) &&
           Minitag::TagMatcher.exclusive_match?(exclusive_tags, runnable_method_tags)
       end
-
-      methods
     end
   end
 end
