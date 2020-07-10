@@ -2,7 +2,7 @@ require 'minitag'
 
 module Minitest
   def self.plugin_minitag_options(opts, options)
-    opts.on '-t', '--tag TAG'do |tag|
+    opts.on '-t', '--tag TAG' do |tag|
       options[:tags] ||= []
       options[:tags] << tag
     end
