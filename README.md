@@ -31,7 +31,7 @@ We can tag specific tests with one or more tags.
 
 
 ```rb
-class MyTest < ActiveSupport::TestCase
+class MyTest < Minitest::Test
   tag 'my_tag', 'another_tag'
   test '#hello minitag' do
     # ...
