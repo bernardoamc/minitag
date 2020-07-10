@@ -6,7 +6,7 @@ module Minitag
       @name = name.to_s
       @exclusive = false
 
-      if @name.to_s.start_with?('~')
+      if @name.start_with?('~')
         @name = @name[1..-1]
         @exclusive = true
       end
