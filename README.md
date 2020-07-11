@@ -1,5 +1,7 @@
 # Minitag
 
+[![Build Status](https://travis-ci.org/bernardoamc/minitag.svg?branch=master)](https://travis-ci.org/bernardoamc/minitag)
+
 A simple gem that allow developers to tag their minitest tests and run tests
 based on these tags.
 
