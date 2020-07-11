@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/minitag.svg)](https://badge.fury.io/rb/minitag)
+
 # Minitag
 
 [![Build Status](https://travis-ci.org/bernardoamc/minitag.svg?branch=master)](https://travis-ci.org/bernardoamc/minitag)
