@@ -48,7 +48,11 @@ end
 
 We can now run our test suite with specific tags:
 
-`$ bundle exec rake test --tag 'my_tag'`
+`$ bundle exec rake test --tag 'unit'`
+
+or even multiple tags:
+
+`$ bundle exec rake test --tag 'unit' --tag 'services' --tag '~model'`
 
 ### More on tag filters
 
