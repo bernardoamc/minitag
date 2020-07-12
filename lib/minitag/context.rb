@@ -34,7 +34,7 @@ module Minitag
     # @return [void]
     def add_filter(tag)
       if tag.start_with?('~')
-        @exclusive_filters << tag[1..-1]
+        @exclusive_filters << tag[1..]
       else
         @inclusive_filters << tag
       end
