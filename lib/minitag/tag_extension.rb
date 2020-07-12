@@ -10,12 +10,12 @@ module Minitag
     # Add tags to be associated with the next test definition.
     #
     # It is important to notice that tags associated with a test have no concept
-    # of inclusive or exclusive tags. This distinction is only valid for tag
+    # of being inclusive or exclusive. This distinction is only valid for tag
     # filters.
     #
     # @param [Array] tags the list of tags to be associated with a test case.
     #
-    # return [void]
+    # @return [void]
     def tag(*tags)
       Minitag.pending_tags = tags.map { |tag| tag.to_s.strip.downcase }
     end

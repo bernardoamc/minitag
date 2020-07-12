@@ -3,7 +3,8 @@
 require 'set'
 
 module Minitag
-  # Stores tags associated with a namespace and name.
+  # Stores tags associated with a test name, which belongs to a namespace.
+  # The namespace is usually the class which the test belongs to.
   class TagRegistry
     def initialize
       @repository = Hash.new { |h, k| h[k] = Set.new }
@@ -11,9 +12,11 @@ module Minitag
 
     # Associates tags with a name taking into account its namespace.
     #
-    # @param [String] namespace the namespace which a test name belongs.
+    # Duplicated tags will be removed during this operation.
+    #
+    # @param [String] namespace the context which a test name belongs.
     # @param [String] name the test name.
-    # @param [Array] tags the collection of tags.
+    # @param [Array] tags the collection of tags associated with a test.
     #
     # @return [void]
     def add(namespace:, name:, tags:)
@@ -22,10 +25,10 @@ module Minitag
 
     # Fetches tags associated with a test name and namespace.
     #
-    # @param [String] namespace the namespace which a test name belongs.
+    # @param [String] namespace the context which a test name belongs.
     # @param [String] name the test name.
     #
-    # @return [Set] the tags associated with the specified namespace and name.
+    # @return [Set] the tags associated with the specified namespace and test name.
     def fetch(namespace:, name:)
       @repository[key(namespace, name)]
     end

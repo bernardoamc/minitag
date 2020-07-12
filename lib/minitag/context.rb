@@ -24,7 +24,7 @@ module Minitag
     end
 
     # Adds a filter tag.
-    # Tags with a ~ prefix are exclusive filters and inclusive filters otherwise.
+    # Tags with a ~ prefix are treated as exclusive filters or inclusive filters otherwise.
     #
     # param [String] name the name of the filter tag.
     #
@@ -42,13 +42,15 @@ module Minitag
 
     # Indicates when a context has no filters.
     #
-    # @return [boolean] whether a context has no filters.
+    # @return [Boolean] whether a context has no filters.
     def no_filters?
       @inclusive_filters.empty? && @exclusive_filters.empty?
     end
 
     # Detects whether the name associated with a namespace contains tags
-    # that matches the filtering criteria.
+    # that matches the filtering criteria. For more information check the methods:
+    #   - match_inclusive_filters?
+    #   - match_exclusive_filters?
     #
     # @param [String] namespace the namespace which a test name belongs.
     # @param [String] name the test name.
@@ -56,7 +58,7 @@ module Minitag
     # Invariants:
     #   - Returns true when no filters are present.
     #
-    # return [boolean] whether there was a match or not.
+    # @return [Boolean] whether there was a match or not.
     def match?(namespace:, name:)
       return true if no_filters?
 
@@ -75,7 +77,7 @@ module Minitag
     #   - Returns false when inclusive filters are specified but there
     #     are no tags.
     #
-    # return [boolean] whether there was a match or not.
+    # @return [Boolean] whether there was a match or not.
     def match_inclusive_filters?(tags)
       return true if @inclusive_filters.empty?
       return false if @inclusive_filters.any? && tags.empty?
@@ -92,7 +94,7 @@ module Minitag
     #   - Returns true when exclusive filters are specified and there
     #     are no tags.
     #
-    # return [boolean] whether there was a match or not.
+    # return [Boolean] whether there was a match or not.
     def match_exclusive_filters?(tags)
       return true if @exclusive_filters.empty?
       return true if @exclusive_filters.any? && tags.empty?
