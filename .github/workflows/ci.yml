@@ -1,0 +1,32 @@
+name: continuous-integration
+on: push
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby 2.7
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+      - name: Cache gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gem-
+      - name: Install gems
+        run: |
+          sed -i '/ruby ".*"/,+1 d' Gemfile
+          bundle_version=`awk '/BUNDLED WITH/{getline; gsub(/ /, "", $0); print}' Gemfile.lock`
+          gem install bundler --no-document -v ${bundle_version}
+          bundle config retry "3"
+          bundle config jobs "$(nproc)"
+          bundle config path vendor/bundle
+          bundle install
+      - name: Run RuboCop
+        run: bundle exec rubocop --parallel
+      - name: Run tests
+        run: bundle exec rake test
