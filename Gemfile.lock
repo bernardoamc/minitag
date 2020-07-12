@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    minitag (0.3.2)
+    minitag (0.3.3)
       minitest (~> 5.0)
 
 GEM
