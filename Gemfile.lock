@@ -39,5 +39,8 @@ DEPENDENCIES
   rake (>= 12.3.3)
   rubocop (~> 0.87.1)
 
+RUBY VERSION
+   ruby 2.6.3p62
+
 BUNDLED WITH
    1.17.2
