@@ -7,15 +7,24 @@ module Minitag
   #   - Associate tags with tests
   #   - Filter tests based on the specified tags
   module TagExtension
+    # Add tags to be associated with the next test definition.
+    #
+    # It is important to notice that tags associated with a test have no concept
+    # of inclusive or exclusive tags. This distinction is only valid for tag
+    # filters.
+    #
+    # @param [Array] tags the list of tags to be associated with a test case.
+    #
+    # return [void]
     def tag(*tags)
-      Minitag.pending_tags = tags
+      Minitag.pending_tags = tags.map { |tag| tag.to_s.strip.downcase }
     end
 
     define_method(:method_added) do |name|
       if name[/\Atest_/]
-        Minitag.pending_tags.each do |pending_tag|
-          Minitag.tag_mapping.add(context: self, name: name, tag: pending_tag)
-        end
+        Minitag.context.add_tags(
+          namespace: self, name: name, tags: Minitag.pending_tags
+        )
 
         Minitag.pending_tags = []
       end
@@ -23,17 +32,10 @@ module Minitag
 
     def runnable_methods
       methods = super.dup
-      return methods if Minitag.execution_tags.empty? || methods.empty?
-
-      execution_tags = Minitag.execution_tags
-      inclusive_tags = execution_tags.select(&:inclusive?).map(&:name)
-      exclusive_tags = execution_tags.select(&:exclusive?).map(&:name)
+      return methods if Minitag.context.no_filters?
 
       methods.select do |runnable_method|
-        runnable_method_tags = Minitag.tag_mapping.fetch(context: self, name: runnable_method).map(&:name)
-
-        Minitag::TagMatcher.inclusive_match?(inclusive_tags, runnable_method_tags) &&
-          Minitag::TagMatcher.exclusive_match?(exclusive_tags, runnable_method_tags)
+        Minitag.context.match?(namespace: self, name: runnable_method)
       end
     end
   end

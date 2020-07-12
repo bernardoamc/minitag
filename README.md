@@ -33,6 +33,7 @@ Require `minitag` in our `test_helper.rb`:
 
 We can tag specific tests with one or more tags.
 
+It is important to point out that tags associated with a test have no concept of being inclusive or exclusive. This distinction is only valid for [tag filters](#running-tests-with-tag-filters).
 
 ```rb
 class MyTest < Minitest::Test
@@ -43,15 +44,15 @@ class MyTest < Minitest::Test
 end
 ```
 
-### Running tests
+### Running tests with tag filters
 
 We can now run our test suite with specific tags:
 
 `$ bundle exec rake test --tag 'my_tag'`
 
-### Extra
+### More on tag filters
 
-Tags can be:
+Tag filters can be:
   1. `inclusive`
   2. `exclusive` with the `~` prefix:
 

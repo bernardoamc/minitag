@@ -26,45 +26,54 @@ module Minitag
 
   class MinitagTest < Minitest::Test
     def test_no_tags
-      Minitag.stub(:execution_tags, []) do
+      with_context do
         expected = %w[test_1 test_2 test_3 test_4]
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
       end
     end
 
     def test_inclusive_test
-      Minitag.stub(:execution_tags, [Tag.new('foo')]) do
+      with_context(filters: %w[foo]) do
         expected = %w[test_1 test_3]
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
       end
     end
 
     def test_multiple_inclusive_test
-      Minitag.stub(:execution_tags, [Tag.new('foo'), Tag.new('bar')]) do
+      with_context(filters: %w[foo bar]) do
         expected = %w[test_1 test_2 test_3]
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
       end
     end
 
     def test_exclusive_test
-      Minitag.stub(:execution_tags, [Tag.new('~foo')]) do
+      with_context(filters: %w[~foo]) do
         expected = %w[test_2 test_4]
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
       end
     end
 
     def test_multiple_exclusive_test
-      Minitag.stub(:execution_tags, [Tag.new('~foo'), Tag.new('~bar')]) do
+      with_context(filters: %w[~foo ~bar]) do
         expected = ['test_4']
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
       end
     end
 
     def test_inclusion_and_exclusion
-      Minitag.stub(:execution_tags, [Tag.new('foo'), Tag.new('~bar')]) do
+      with_context(filters: %w[foo ~bar]) do
         expected = ['test_1']
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
       end
+    end
+
+    private
+
+    def with_context(filters: [])
+      filters.each { |filter| Minitag.context.add_filter(filter) }
+      yield
+      Minitag.context.instance_variable_set(:@inclusive_filters, Set.new)
+      Minitag.context.instance_variable_set(:@exclusive_filters, Set.new)
     end
   end
 end
