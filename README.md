@@ -38,7 +38,7 @@ It is important to point out that tags associated with a test have no concept of
 ```rb
 class MyTest < Minitest::Test
   tag 'my_tag', 'another_tag'
-  test '#hello minitag' do
+  def test_hello_minitest
     # ...
   end
 end
