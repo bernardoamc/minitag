@@ -1,4 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/minitag.svg)](https://badge.fury.io/rb/minitag)
+[![Gem Version](https://badge.fury.io/rb/minitag.svg)](https://badge.fury.io/rb/minitag) [![](https://github.com/bernardoamc/minitag/workflows/continuous-integration/badge.svg)](https://github.com/bernardoamc/minitag/actions?query=workflow%3Acontinuous-integration)
 
 # Minitag
 
