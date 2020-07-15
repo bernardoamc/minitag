@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 module Minitag
   # Stores tags associated with a test name, which belongs to a namespace.
   # The namespace is usually the class which the test belongs to.

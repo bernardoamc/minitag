@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require 'set'
 require 'minitest'
 require 'minitag/version'
 require 'minitag/context'
+require 'minitag/minitest_tag'
 require 'minitag/tag_extension'
 
 # Namespace for classes or modules providing tagging functionality

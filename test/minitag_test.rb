@@ -24,7 +24,21 @@ module Minitag
     end
   end
 
+  class MinitagWithoutTagsTest < Minitest::Test
+    def test_1
+      skip 'Test scenario'
+    end
+  end
+
   class MinitagTest < Minitest::Test
+    def test_class_without_tags_dont_have_tag_extension_as_ancestor
+      refute_includes MinitagWithoutTagsTest.singleton_class.ancestors, TagExtension
+    end
+
+    def test_class_with_tags_have_tag_extension_as_ancestor
+      assert_includes MinitagScenariosTest.singleton_class.ancestors, TagExtension
+    end
+
     def test_no_tags
       with_context do
         expected = %w[test_1 test_2 test_3 test_4]

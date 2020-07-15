@@ -1,25 +1,11 @@
 # frozen_string_literal: true
 
 module Minitag
-  # Module used to extend Minitest::Test.
+  # Module used to extend classes that rely on tags.
   # It has the following responsibilities:
-  #   - Introduce the tag functionality
   #   - Associate tags with tests
   #   - Filter tests based on the specified tags
   module TagExtension
-    # Add tags to be associated with the next test definition.
-    #
-    # It is important to notice that tags associated with a test have no concept
-    # of being inclusive or exclusive. This distinction is only valid for tag
-    # filters.
-    #
-    # @param [Array] tags the list of tags to be associated with a test case.
-    #
-    # @return [void]
-    def tag(*tags)
-      Minitag.pending_tags = tags.map { |tag| tag.to_s.strip.downcase }
-    end
-
     define_method(:method_added) do |name|
       if name[/\Atest_/]
         Minitag.context.add_tags(
@@ -40,5 +26,3 @@ module Minitag
     end
   end
 end
-
-Minitest::Test.singleton_class.prepend(Minitag::TagExtension)

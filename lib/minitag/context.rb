@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
 require_relative './tag_registry'
 
 module Minitag
