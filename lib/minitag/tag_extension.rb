@@ -21,7 +21,7 @@ module Minitag
     end
 
     define_method(:method_added) do |name|
-      if name[/\Atest_/]
+      if name.start_with?('test_')
         Minitag.context.add_tags(
           namespace: self, name: name, tags: Minitag.pending_tags
         )
