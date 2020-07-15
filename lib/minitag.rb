@@ -4,6 +4,7 @@ require 'set'
 require 'minitest'
 require 'minitag/version'
 require 'minitag/context'
+require 'minitag/extension_registry'
 require 'minitag/minitest_tag'
 require 'minitag/tag_extension'
 
@@ -11,6 +12,16 @@ require 'minitag/tag_extension'
 # to Minitest::Test
 module Minitag
   class << self
+    # Registry of classes that requires extension by Minitag::TagExtension.
+    def extension_registry
+      @extension_registry ||= ExtensionRegistry.new
+    end
+
+    # Register a class for extension.
+    def register_for_extension(klass)
+      extension_registry.register(klass)
+    end
+
     # Execution context of the test suite.
     def context
       @context ||= Context.new

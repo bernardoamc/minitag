@@ -15,7 +15,7 @@ module Minitag
     # @return [void]
     def tag(*tags)
       Minitag.pending_tags = tags.map { |tag| tag.to_s.strip.downcase }
-      singleton_class.prepend(Minitag::TagExtension)
+      Minitag.register_for_extension(self)
     end
   end
 end
