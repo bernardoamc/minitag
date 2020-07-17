@@ -14,7 +14,7 @@ module Minitest
 
   def self.plugin_minitag_init(options)
     Array(options[:tags]).each do |tag|
-      Minitag.context.add_filter(tag)
+      Minitag.add_filter(tag)
     end
   end
 end

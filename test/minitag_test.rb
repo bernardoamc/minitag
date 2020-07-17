@@ -41,12 +41,18 @@ module Minitag
       refute_includes MinitagWithoutTagsTest.singleton_class.ancestors, TagExtension
     end
 
+    def test_class_with_namespace_tags_dont_have_tag_extension_as_ancestor
+      refute_includes MinitagNamespaceTagsTest.singleton_class.ancestors, TagExtension
+    end
+
     def test_class_with_test_tags_have_tag_extension_as_ancestor
       assert_includes MinitagScenariosTest.singleton_class.ancestors, TagExtension
     end
 
-    def test_class_with_namespace_tags_have_tag_extension_as_ancestor
-      assert_includes MinitagNamespaceTagsTest.singleton_class.ancestors, TagExtension
+    def test_every_class_should_have_minitest_tag_as_ancestor
+      assert_includes MinitagWithoutTagsTest.singleton_class.ancestors, MinitestTag
+      assert_includes MinitagNamespaceTagsTest.singleton_class.ancestors, MinitestTag
+      assert_includes MinitagScenariosTest.singleton_class.ancestors, MinitestTag
     end
 
     ######################

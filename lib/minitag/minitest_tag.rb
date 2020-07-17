@@ -19,8 +19,6 @@ module Minitag
         namespace: to_s,
         tags: tags.map { |tag| tag.to_s.strip.downcase }
       )
-
-      Minitag.register_for_extension(self)
     end
 
     # Add tags to be associated with the next test definition and extends the
@@ -36,6 +34,23 @@ module Minitag
     def tag(*tags)
       Minitag.pending_tags = tags.map { |tag| tag.to_s.strip.downcase }
       Minitag.register_for_extension(self)
+    end
+
+    # Decides which methods to run based on an Array of test names provided by
+    # the superclass and the tags defined within test classes.
+    #
+    # Invariants:
+    #   - Returns the full list of test names when the test suite runs without
+    #   any tag filtering.
+    #
+    # @return [Array] the list of test names that should run.
+    def runnable_methods
+      methods = super.dup
+      return methods if Minitag.context.no_filters?
+
+      methods.select do |runnable_method|
+        Minitag.context.match?(namespace: to_s, name: runnable_method)
+      end
     end
   end
 end
