@@ -2,8 +2,18 @@
 
 # Minitag
 
-A simple gem that allow developers to tag their minitest tests and run tests
-based on these tags.
+A simple gem that allow developers using minitest to specify tags for their classes and tests, and run their test suite based on these tags.
+
+This gem should be framework agnostic, let me know if you encounter any problems
+running this within the framework of your choice.
+
+## When should I use this?
+
+- When there's a need to split a test suite into different CI steps.
+- During development, it's helpful to have extra flexibility when running a big
+  test suite.
+- When there are tests that you want to run only occasionality. For example,
+  tests that perform network calls or have expensive side effects.
 
 ## Installation
 
@@ -23,18 +33,22 @@ $ gem install minitag
 
 ### Setup
 
-Require `minitag` in our `test_helper.rb`:
+Require `minitag` within `test_helper.rb`:
 
 `require 'minitag'`
 
 ### Adding tags
 
-We can tag specific tests with one or more tags.
+We can tag specific classes or tests with one or more tags.
 
-It is important to point out that tags associated with a test have no concept of being inclusive or exclusive. This distinction is only valid for [tag filters](#running-tests-with-tag-filters).
+It is important to point out that tags associated with a class or test have no concept of being inclusive or exclusive. This distinction is only valid for [tag filters](#running-tests-with-tag-filters).
 
 ```rb
 class MyTest < Minitest::Test
+  # Every test within this class will inherit this tag
+  tag_namespace 'my_namespace_tag'
+
+  # Only the test below will have this tag
   tag 'my_tag', 'another_tag'
   def test_hello_minitest
     # ...
