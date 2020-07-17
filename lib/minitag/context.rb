@@ -18,12 +18,25 @@ module Minitag
     # @param [Array] tags the collection of tags.
     #
     # @return [void]
-    def add_tags(namespace:, name:, tags:)
+    def add_test_tags(namespace:, name:, tags:)
       @tag_registry.add(namespace: namespace, name: name, tags: tags)
     end
 
+    # Add tags to an entire namespace. Every test within the namespace will
+    # share these tags.
+    #
+    # @param [String] namespace the namespace that contain tests.
+    # @param [Array] tags the collection of tags.
+    #
+    # @return [void]
+    def add_namespace_tags(namespace:, tags:)
+      @tag_registry.add_for_namespace(namespace: namespace, tags: tags)
+    end
+
     # Adds a filter tag.
-    # Tags with a ~ prefix are treated as exclusive filters or inclusive filters otherwise.
+    #
+    # Tags with a ~ prefix are treated as exclusive filters or inclusive filters
+    # otherwise.
     #
     # param [String] name the name of the filter tag.
     #
@@ -61,7 +74,7 @@ module Minitag
     def match?(namespace:, name:)
       return true if no_filters?
 
-      tags = @tag_registry.fetch(namespace: namespace, name: name)
+      tags = @tag_registry.get(namespace: namespace, name: name)
       match_inclusive_filters?(tags) && match_exclusive_filters?(tags)
     end
 

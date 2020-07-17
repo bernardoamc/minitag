@@ -8,8 +8,8 @@ module Minitag
   module TagExtension
     define_method(:method_added) do |name|
       if name[/\Atest_/]
-        Minitag.context.add_tags(
-          namespace: self, name: name, tags: Minitag.pending_tags
+        Minitag.context.add_test_tags(
+          namespace: to_s, name: name, tags: Minitag.pending_tags
         )
 
         Minitag.pending_tags = []
@@ -21,7 +21,7 @@ module Minitag
       return methods if Minitag.context.no_filters?
 
       methods.select do |runnable_method|
-        Minitag.context.match?(namespace: self, name: runnable_method)
+        Minitag.context.match?(namespace: to_s, name: runnable_method)
       end
     end
   end

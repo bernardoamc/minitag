@@ -1,13 +1,8 @@
 AllCops:
   NewCops: enable
 
-Metrics/AbcSize:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
 Layout/LineLength:
   Max: 120
 
-
+Metrics/ClassLength:
+  Enabled: false
