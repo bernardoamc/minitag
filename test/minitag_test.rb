@@ -95,7 +95,7 @@ module Minitag
 
     def test_exclusive_match_namespace_tags
       with_context(filters: %w[~all]) do
-        expected = %w[]
+        expected = []
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
       end
     end
@@ -119,15 +119,6 @@ module Minitag
         expected = %w[test_1 test_4]
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
       end
-    end
-
-    private
-
-    def with_context(filters: [])
-      filters.each { |filter| Minitag.context.add_filter(filter) }
-      yield
-      Minitag.context.instance_variable_set(:@inclusive_filters, Set.new)
-      Minitag.context.instance_variable_set(:@exclusive_filters, Set.new)
     end
   end
 end

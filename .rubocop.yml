@@ -6,3 +6,7 @@ Layout/LineLength:
 
 Metrics/ClassLength:
   Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*_test.rb'
