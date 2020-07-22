@@ -7,14 +7,6 @@ A simple gem that allow developers using minitest to specify tags for their clas
 This gem should be framework agnostic, let me know if you encounter any problems
 running this within the framework of your choice.
 
-## When should I use this?
-
-- When there's a need to split a test suite into different CI steps.
-- During development, it's helpful to have extra flexibility when running a big
-  test suite.
-- When there are tests that you want to run only occasionality. For example,
-  tests that perform network calls or have expensive side effects.
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -30,12 +22,6 @@ $ gem install minitag
 ```
 
 ## Usage
-
-### Setup
-
-Require `minitag` within `test_helper.rb`:
-
-`require 'minitag'`
 
 ### Adding tags
 
@@ -83,6 +69,24 @@ $ bundle exec rake test --tag '~unit'
 # Only run tests that are tagged with 'unit' and are NOT 'parallel'
 $ bundle exec rake test --tag 'unit' --tag '~parallel'
 ```
+
+## FAQ
+
+### Is this gem compatible with Rails?
+
+Yes. Found any problems? Please open an issue or reach out to me.
+
+### Is this gem compatible with the spec part of minitest?
+
+For the most part yes, but tagging `describe` blocks are not supported.
+
+### When should I use this gem?
+
+- When there's a need to split a test suite into different CI steps.
+- During development, it's helpful to have extra flexibility when running a big
+  test suite.
+- When there are tests that you want to run only occasionality. For example,
+  tests that perform network calls or have expensive side effects.
 
 ## Development
 
