@@ -1,26 +1,26 @@
 name: continuous-integration
-on:
-  push:
-  pull_request:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
   ci:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [ '2.6', '2.7' ]
+    name: Ruby ${{ matrix.ruby }}
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Ruby 2.7
+      - name: Set up Ruby ${{ matrix.ruby }}
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: "2.7"
+          ruby-version: ${{ matrix.ruby }}
       - name: Cache gems
         uses: actions/cache@v2
         with:
           path: vendor/bundle
-          key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+          key: ${{ runner.os }}-${{ matrix.ruby }}-gem-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-gem-
+            ${{ runner.os }}-${{ matrix.ruby }}-gem-
       - name: Install gems
         run: |
           sed -i '/ruby ".*"/,+1 d' Gemfile
