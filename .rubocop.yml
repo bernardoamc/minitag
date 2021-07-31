@@ -10,3 +10,11 @@ Metrics/ClassLength:
 Metrics/BlockLength:
   Exclude:
     - 'test/**/*_test.rb'
+
+Lint/EmptyBlock:
+  Exclude:
+    - 'test/**/*_test.rb'
+
+Naming/VariableNumber:
+  Exclude:
+    - 'test/**/*_test.rb'
