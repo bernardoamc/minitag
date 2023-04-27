@@ -36,6 +36,21 @@ module Minitag
       Minitag.register_for_extension(self)
     end
 
+    def run_one_method(klass, method_name, reporter) # rubocop:disable Metrics/AbcSize
+      return super if !Minitag.skip_filtered? || Minitag.context.no_filters? ||
+                      Minitag.context.match?(namespace: to_s, name: method_name)
+
+      # Skip this test
+      test = klass.new(method_name)
+      test.time = 0
+      skip = Minitest::Skip.new('This test did not match filters')
+      source = test.method(method_name).source_location
+      skip.set_backtrace(["#{source[0]}:#{source[1]}"])
+      test.failures << skip
+      reporter.prerecord(self, method_name)
+      reporter.record(Minitest::Result.from(test))
+    end
+
     # Decides which methods to run based on an Array of test names provided by
     # the superclass and the tags defined within test classes.
     #
@@ -46,7 +61,7 @@ module Minitag
     # @return [Array] the list of test names that should run.
     def runnable_methods
       methods = super.dup
-      return methods if Minitag.context.no_filters?
+      return methods if Minitag.skip_filtered? || Minitag.context.no_filters?
 
       methods.select do |runnable_method|
         Minitag.context.match?(namespace: to_s, name: runnable_method)

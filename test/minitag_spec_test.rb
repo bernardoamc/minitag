@@ -8,21 +8,21 @@ describe Minitag do
 
     tag 'foo'
     it 'spec_1' do
-      skip 'Test scenario'
+      assert true
     end
 
     tag 'bar'
     it 'spec_2' do
-      skip 'Test scenario'
+      assert true
     end
 
     tag 'foo', 'bar'
     it 'spec_3' do
-      skip 'Test scenario'
+      assert true
     end
 
     it 'spec_4' do
-      skip 'Test scenario'
+      assert true
     end
   end
 
@@ -61,10 +61,47 @@ describe Minitag do
       end
     end
 
+    it 'runs without filtering tags even with skipping enabled' do
+      with_context(skip_filtered: true) do
+        expected = %w[test_0001_spec_1 test_0002_spec_2 test_0003_spec_3 test_0004_spec_4]
+        _(scenarios_class.runnable_methods.sort).must_equal expected
+      end
+    end
+
+    it 'does not skip with skipping enabled without filtering tags' do
+      with_context(skip_filtered: true) do
+        reporter = Minitest::StatisticsReporter.new
+        scenarios_class.run_one_method(scenarios_class, 'test_0001_spec_1', reporter)
+        _(reporter.count).must_equal 1
+        _(reporter.results).must_be_empty
+      end
+    end
+
     it 'test_inclusive_match_test_tags' do
       with_context(filters: %w[foo]) do
         expected = %w[test_0001_spec_1 test_0003_spec_3]
         _(scenarios_class.runnable_methods.sort).must_equal expected
+      end
+    end
+
+    it 'test_inclusive_match_test_tags_skip_runnable' do
+      with_context(filters: %w[foo], skip_filtered: true) do
+        # runnable_methods shouldn't filter at all
+        expected = %w[test_0001_spec_1 test_0002_spec_2 test_0003_spec_3 test_0004_spec_4]
+        _(scenarios_class.runnable_methods.sort).must_equal expected
+      end
+    end
+
+    it 'test_skip_with_inclusive_match_test_tags' do
+      with_context(filters: %w[foo], skip_filtered: true) do
+        reporter = Minitest::StatisticsReporter.new
+        scenarios_class.run_one_method(scenarios_class, 'test_0002_spec_2', reporter)
+        _(reporter.count).must_equal 1
+        _(reporter.results.length).must_equal 1
+        result = reporter.results.first
+        _(result.name).must_equal 'test_0002_spec_2'
+        assert result.skipped?
+        assert reporter.passed?
       end
     end
 
@@ -86,6 +123,27 @@ describe Minitag do
       with_context(filters: %w[~foo]) do
         expected = %w[test_0002_spec_2 test_0004_spec_4]
         _(scenarios_class.runnable_methods.sort).must_equal expected
+      end
+    end
+
+    it 'test_exclusive_match_test_tags_skip_runnable' do
+      with_context(filters: %w[~foo], skip_filtered: true) do
+        # runnable_methods shouldn't filter at all
+        expected = %w[test_0001_spec_1 test_0002_spec_2 test_0003_spec_3 test_0004_spec_4]
+        _(scenarios_class.runnable_methods.sort).must_equal expected
+      end
+    end
+
+    it 'test_skip_exclusive_match_test_tags' do
+      with_context(filters: %w[~foo], skip_filtered: true) do
+        reporter = Minitest::StatisticsReporter.new
+        scenarios_class.run_one_method(scenarios_class, 'test_0001_spec_1', reporter)
+        _(reporter.count).must_equal 1
+        _(reporter.results.length).must_equal 1
+        result = reporter.results.first
+        _(result.name).must_equal 'test_0001_spec_1'
+        assert result.skipped?
+        assert reporter.passed?
       end
     end
 

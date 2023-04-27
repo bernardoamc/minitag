@@ -8,21 +8,21 @@ module Minitag
 
     tag 'foo'
     def test_1
-      skip 'Test scenario'
+      assert true
     end
 
     tag 'bar'
     def test_2
-      skip 'Test scenario'
+      assert true
     end
 
     tag 'foo', 'bar'
     def test_3
-      skip 'Test scenario'
+      assert true
     end
 
     def test_4
-      skip 'Test scenario'
+      assert true
     end
   end
 
@@ -65,10 +65,46 @@ module Minitag
       end
     end
 
+    def test_no_filter_tags_skip
+      with_context(skip_filtered: true) do
+        expected = %w[test_1 test_2 test_3 test_4]
+        assert_equal expected, MinitagScenariosTest.runnable_methods.sort
+      end
+    end
+
+    def test_does_not_skip_with_no_filter_tags
+      with_context(skip_filtered: true) do
+        reporter = Minitest::StatisticsReporter.new
+        MinitagScenariosTest.run_one_method(MinitagScenariosTest, 'test_1', reporter)
+        assert_equal 1, reporter.count
+        assert_empty reporter.results
+      end
+    end
+
     def test_inclusive_match_test_tags
       with_context(filters: %w[foo]) do
         expected = %w[test_1 test_3]
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
+      end
+    end
+
+    def test_inclusive_match_test_tags_skip_runnable
+      with_context(filters: %w[foo], skip_filtered: true) do
+        expected = %w[test_1 test_2 test_3 test_4] # runnable_methods shouldn't filter at all
+        assert_equal expected, MinitagScenariosTest.runnable_methods.sort
+      end
+    end
+
+    def test_skip_with_inclusive_match_test_tags
+      with_context(filters: %w[foo], skip_filtered: true) do
+        reporter = Minitest::StatisticsReporter.new
+        MinitagScenariosTest.run_one_method(MinitagScenariosTest, 'test_2', reporter)
+        assert_equal 1, reporter.count
+        assert_equal 1, reporter.results.length
+        result = reporter.results.first
+        assert_equal result.name, 'test_2'
+        assert result.skipped?
+        assert reporter.passed?
       end
     end
 
@@ -90,6 +126,26 @@ module Minitag
       with_context(filters: %w[~foo]) do
         expected = %w[test_2 test_4]
         assert_equal expected, MinitagScenariosTest.runnable_methods.sort
+      end
+    end
+
+    def test_exclusive_match_test_tags_skip_runnable
+      with_context(filters: %w[~foo], skip_filtered: true) do
+        expected = %w[test_1 test_2 test_3 test_4] # runnable_methods shouldn't filter at all
+        assert_equal expected, MinitagScenariosTest.runnable_methods.sort
+      end
+    end
+
+    def test_skip_exclusive_match_test_tags
+      with_context(filters: %w[~foo], skip_filtered: true) do
+        reporter = Minitest::StatisticsReporter.new
+        MinitagScenariosTest.run_one_method(MinitagScenariosTest, 'test_1', reporter)
+        assert_equal 1, reporter.count
+        assert_equal 1, reporter.results.length
+        result = reporter.results.first
+        assert_equal result.name, 'test_1'
+        assert result.skipped?
+        assert reporter.passed?
       end
     end
 

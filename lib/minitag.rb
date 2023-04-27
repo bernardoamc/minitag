@@ -12,6 +12,8 @@ require 'minitag/tag_extension'
 # to Minitest::Test
 module Minitag
   class << self
+    attr_writer :skip_filtered
+
     # Registry of classes that requires extension by Minitag::TagExtension.
     def extension_registry
       @extension_registry ||= ExtensionRegistry.new
@@ -40,6 +42,11 @@ module Minitag
     # Tags set from the `tag` method.
     def pending_tags=(tags)
       @pending_tags = Array(tags)
+    end
+
+    # Whether to skip (true) or hide (false) filtered tests.
+    def skip_filtered?
+      @skip_filtered || false
     end
   end
 end
