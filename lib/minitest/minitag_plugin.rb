@@ -10,11 +10,17 @@ module Minitest
       options[:tags] ||= []
       options[:tags] << tag.to_s.strip.downcase
     end
+
+    opts.on '--skip-filtered' do
+      options[:skip_filtered] = true
+    end
   end
 
   def self.plugin_minitag_init(options)
     Array(options[:tags]).each do |tag|
       Minitag.add_filter(tag)
     end
+
+    Minitag.skip_filtered = options.fetch(:skip_filtered, false)
   end
 end
